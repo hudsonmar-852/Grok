@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Grok Video Prompt Menu</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #0f1117;
+  color: #ffffff;
+}
+
+header {
+  padding: 40px 20px;
+  text-align: center;
+  background: linear-gradient(135deg, #111827, #1f2937);
+}
+
+h1 {
+  font-size: 34px;
+  margin-bottom: 10px;
+}
+
+.subtitle {
+  color: #cbd5e1;
+  font-size: 17px;
+}
+
+.container {
+  max-width: 1000px;
+  margin: auto;
+  padding: 30px 16px;
+}
+
+.summary {
+  background: #1e293b;
+  padding: 20px;
+  border-radius: 18px;
+  margin-bottom: 25px;
+  line-height: 1.7;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 18px;
+}
+
+.card {
+  background: #171923;
+  border: 1px solid #334155;
+  border-radius: 18px;
+  padding: 20px;
+}
+
+.card h2 {
+  font-size: 20px;
+  margin-top: 0;
+}
+
+.card p {
+  color: #cbd5e1;
+  line-height: 1.6;
+}
+
+.prompt {
+  background: #020617;
+  padding: 14px;
+  border-radius: 12px;
+  font-size: 14px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  margin-top: 12px;
+}
+
+button {
+  margin-top: 12px;
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 10px;
+  background: #38bdf8;
+  color: #020617;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #7dd3fc;
+}
+
+footer {
+  text-align: center;
+  color: #94a3b8;
+  padding: 30px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>Grok Video Prompt Menu</h1>
+  <div class="subtitle">ChatGPT × Grok Imagine 影片提示詞工作台</div>
+</header>
+
+<div class="container">
+
+  <section class="summary">
+    <h2>使用 Summary</h2>
+    <p>
+      這個網站用來整理 Grok Imagine 影片 Prompt。你可以按不同影片用途選擇提示詞，
+      然後一鍵 Copy 到 Grok。設計重點是：角色一致、場景連貫、動作自然、短片有故事感。
+    </p>
+  </section>
+
+  <div class="grid">
+
+    <div class="card">
+      <h2>1. 角色延續影片</h2>
+      <p>適合由一張人物相片開始，生成自然連續短片。</p>
+      <div class="prompt" id="p1">Create a cinematic 8-second video using the uploaded character reference. Keep the same face identity, hairstyle, body proportion, outfit, and overall mood. The subject moves naturally within the same environment, with subtle facial expression changes, realistic breathing, and smooth body motion. Camera movement should be slow and cinematic, with no sudden scene change.</div>
+      <button onclick="copyPrompt('p1')">Copy Prompt</button>
+    </div>
+
+    <div class="card">
+      <h2>2. 故事延伸 Scene</h2>
+      <p>適合做第 2、3、4 段延伸影片，避免突然轉場。</p>
+      <div class="prompt" id="p2">Continue directly from the previous scene. Maintain the same character, same location, same lighting, same emotional tone, and same cinematic style. Extend the action naturally as if this is the next 8-second part of the same story. Do not reset the scene. Do not introduce new characters unless already visible.</div>
+      <button onclick="copyPrompt('p2')">Copy Prompt</button>
+    </div>
+
+    <div class="card">
+      <h2>3. 情緒互動影片</h2>
+      <p>適合人物之間有眼神、距離、表情變化。</p>
+      <div class="prompt" id="p3">Generate a realistic emotional interaction scene. The characters maintain natural eye contact, subtle facial reactions, small hand gestures, and believable body language. The mood should feel intimate, warm, cinematic, and human. Avoid exaggerated acting, avoid artificial expressions, and keep the motion realistic.</div>
+      <button onclick="copyPrompt('p3')">Copy Prompt</button>
+    </div>
+
+    <div class="card">
+      <h2>4. IG Reels 戲劇感</h2>
+      <p>適合短片開頭有強烈畫面吸引力。</p>
+      <div class="prompt" id="p4">Create a highly engaging vertical cinematic video for Instagram Reels. Start with a strong visual hook in the first second. Use expressive body language, clear emotional contrast, and smooth camera movement. The scene should feel realistic, stylish, and instantly understandable without dialogue.</div>
+      <button onclick="copyPrompt('p4')">Copy Prompt</button>
+    </div>
+
+    <div class="card">
+      <h2>5. 超寫實人物鏡頭</h2>
+      <p>適合提升真實感、去 AI 感。</p>
+      <div class="prompt" id="p5">Ultra-realistic cinematic portrait video, natural skin texture, realistic eyes, subtle imperfections, authentic facial movement, soft natural lighting, shallow depth of field, professional camera look, no plastic skin, no CGI feeling, no artificial smile, no distorted hands.</div>
+      <button onclick="copyPrompt('p5')">Copy Prompt</button>
+    </div>
+
+    <div class="card">
+      <h2>6. 影片收尾停格</h2>
+      <p>適合結尾自然停住，不會亂延伸。</p>
+      <div class="prompt" id="p6">End the clip naturally once the main action is completed. The character should settle into a calm resting pose, with mouth movement stopped, relaxed facial expression, and stable body posture. Do not add extra actions after the scene objective is finished.</div>
+      <button onclick="copyPrompt('p6')">Copy Prompt</button>
+    </div>
+
+  </div>
+</div>
+
+<footer>
+  Grok Prompt System © 2026
+</footer>
+
+<script>
+function copyPrompt(id) {
+  const text = document.getElementById(id).innerText;
+  navigator.clipboard.writeText(text).then(() => {
+    alert("Prompt copied!");
+  });
+}
+</script>
+
+</body>
+</html>
