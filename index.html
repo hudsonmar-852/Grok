@@ -1,181 +1,321 @@
 <!DOCTYPE html>
 <html lang="zh-HK">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Grok Video Prompt Menu</title>
-
-<style>
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: #0f1117;
-  color: #ffffff;
-}
-
-header {
-  padding: 40px 20px;
-  text-align: center;
-  background: linear-gradient(135deg, #111827, #1f2937);
-}
-
-h1 {
-  font-size: 34px;
-  margin-bottom: 10px;
-}
-
-.subtitle {
-  color: #cbd5e1;
-  font-size: 17px;
-}
-
-.container {
-  max-width: 1000px;
-  margin: auto;
-  padding: 30px 16px;
-}
-
-.summary {
-  background: #1e293b;
-  padding: 20px;
-  border-radius: 18px;
-  margin-bottom: 25px;
-  line-height: 1.7;
-}
-
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 18px;
-}
-
-.card {
-  background: #171923;
-  border: 1px solid #334155;
-  border-radius: 18px;
-  padding: 20px;
-}
-
-.card h2 {
-  font-size: 20px;
-  margin-top: 0;
-}
-
-.card p {
-  color: #cbd5e1;
-  line-height: 1.6;
-}
-
-.prompt {
-  background: #020617;
-  padding: 14px;
-  border-radius: 12px;
-  font-size: 14px;
-  line-height: 1.6;
-  white-space: pre-wrap;
-  margin-top: 12px;
-}
-
-button {
-  margin-top: 12px;
-  width: 100%;
-  padding: 12px;
-  border: none;
-  border-radius: 10px;
-  background: #38bdf8;
-  color: #020617;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-button:hover {
-  background: #7dd3fc;
-}
-
-footer {
-  text-align: center;
-  color: #94a3b8;
-  padding: 30px;
-}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Grok Video Prompt Menu</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #0f1117;
+      color: #fff;
+    }
+    header {
+      padding: 40px 20px;
+      text-align: center;
+      background: linear-gradient(135deg, #111827, #1f2937);
+    }
+    h1 {
+      font-size: 34px;
+      margin: 0 0 10px 0;
+    }
+    .subtitle {
+      color: #cbd5e1;
+      font-size: 17px;
+    }
+    .container {
+      max-width: 1100px;
+      margin: auto;
+      padding: 30px 16px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 18px;
+    }
+    .card {
+      background: #171923;
+      border: 1px solid #334155;
+      border-radius: 18px;
+      padding: 22px;
+    }
+    .card h2 {
+      margin: 0 0 8px 0;
+      font-size: 20px;
+    }
+    .card p {
+      margin: 0 0 10px 0;
+      color: #cbd5e1;
+      line-height: 1.5;
+    }
+    .prompt {
+      background: #020617;
+      padding: 14px;
+      border-radius: 12px;
+      font-size: 14px;
+      line-height: 1.5;
+      white-space: pre-wrap;
+    }
+    button {
+      margin-top: 12px;
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 10px;
+      background: #38bdf8;
+      color: #020617;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #7dd3fc;
+    }
+    footer {
+      text-align: center;
+      color: #94a3b8;
+      padding: 30px;
+    }
+  </style>
 </head>
-
 <body>
+  <header>
+    <h1>Grok Video Prompt Menu</h1>
+    <div class="subtitle">ChatGPT × Grok Imagine 影片提示詞工作台</div>
+  </header>
 
-<header>
-  <h1>Grok Video Prompt Menu</h1>
-  <div class="subtitle">ChatGPT × Grok Imagine 影片提示詞工作台</div>
-</header>
-
-<div class="container">
-
-  <section class="summary">
-    <h2>使用 Summary</h2>
-    <p>
-      這個網站用來整理 Grok Imagine 影片 Prompt。你可以按不同影片用途選擇提示詞，
-      然後一鍵 Copy 到 Grok。設計重點是：角色一致、場景連貫、動作自然、短片有故事感。
-    </p>
-  </section>
-
-  <div class="grid">
-
-    <div class="card">
-      <h2>1. 角色延續影片</h2>
-      <p>適合由一張人物相片開始，生成自然連續短片。</p>
-      <div class="prompt" id="p1">Create a cinematic 8-second video using the uploaded character reference. Keep the same face identity, hairstyle, body proportion, outfit, and overall mood. The subject moves naturally within the same environment, with subtle facial expression changes, realistic breathing, and smooth body motion. Camera movement should be slow and cinematic, with no sudden scene change.</div>
-      <button onclick="copyPrompt('p1')">Copy Prompt</button>
+  <div class="container">
+    <div class="grid">
+      <div class="card">
+        <h2>1. 非洲型男行走風（原版）</h2>
+        <p>像國外版型男街頭影片。</p>
+        <div class="prompt" id="p1">Generate an 8-second cinematic clip: African handsome man with broad muscular chest, walking in a tight shirt and jeans, wet looking. It should have superior quality, 8K. DSLR, photorealistic, sportswear fashion.</div>
+        <button onclick="copyPrompt('p1')">Copy Prompt</button>
+      </div>
+      <div class="card">
+        <h2>2. 黑西裝纖瘦氣質（原版）</h2>
+        <p>精緻商務電影感。</p>
+        <div class="prompt" id="p2">Generate a short clip: slim African man in a sexy fitted suit, standing and walking with elegance. 8K quality, cinematic lighting, film grain, DSLR shot, realistic.</div>
+        <button onclick="copyPrompt('p2')">Copy Prompt</button>
+      </div>
+      <div class="card">
+        <h2>3. 白人健身帥（原版）</h2>
+        <p>健身感，影片質感。</p>
+        <div class="prompt" id="p3">Generate an 8-second video clip: white man handsome gym style, strong muscles, tight workout outfit. Keep realistic motion, high quality, cinematic lighting, 8K.</div>
+        <button onclick="copyPrompt('p3')">Copy Prompt</button>
+      </div>
+      <div class="card">
+        <h2>4. 亞洲小鮮肉Vlog（原版）</h2>
+        <p>韓式、街頭Vlog感。</p>
+        <div class="prompt" id="p4">Generate a high quality cinematic vlog clip: Asian young handsome man, stylish outfits, walking on urban street, turning head casually. 8K DSLR look, realistic skin and lighting.</div>
+        <button onclick="copyPrompt('p4')">Copy Prompt</button>
+      </div>
+      <div class="card">
+        <h2>5. 全民網紅合照風（原版）</h2>
+        <p>多人合照感，主角位清晰。</p>
+        <div class="prompt" id="p5">Generate a short cinematic video: group of handsome Asian guys and attractive girls taking a photo together. keep the main subject in the center and clear. realistic lighting, film look, 8K quality.</div>
+        <button onclick="copyPrompt('p5')">Copy Prompt</button>
+      </div>
+      <div class="card">
+        <h2>6. 主線廣告式輸出（原版）</h2>
+        <p>聚焦亞裔主角，像廣告片。</p>
+        <div class="prompt" id="p6">Generate a cinematic promo video: stunning realism based on described scenes, very nice looking Asian man. keep continuous characters, clear environment, photoreal 8K.</div>
+        <button onclick="copyPrompt('p6')">Copy Prompt</button>
+      </div>
+      <div class="card">
+        <h2>7. 亞洲型男街頭風</h2>
+        <p>夜色城市感，走路/回頭/整理衣服。</p>
+        <div class="prompt" id="p7">Cinematic 8-second video of an Asian super handsome guy with a broad chest wearing a fitted white tee and denim jacket, walking through a neon-lit street. Slow tracking shot, natural breathing, small gestures like adjusting sleeves, realistic lighting and shadows.</div>
+        <button onclick="copyPrompt('p7')">Copy Prompt</button>
+      </div>
+      <div class="card">
+        <h2>8. 健身房質感片段</h2>
+        <p>自然動作、汗光、肌肉線條但唔裸露。</p>
+        <div class="prompt" id="p8">Shoot a realistic gym clip: Asian super handsome guy with broad chest in a fitted tank (no nudity), doing slow controlled reps. Focus on motion quality, breath, subtle muscle definition, cinematic lighting, no exaggerated acting.</div>
+        <button onclick="copyPrompt('p8')">Copy Prompt</button>
+      </div>
+      <div class="card">
+        <h2>9. 黑西裝氣場</h2>
+        <p>視覺係衣著輪廓+氣場，唔靠裸露。</p>
+        <div class="prompt" id="p9">High-end cinematic video: Asian super handsome man with broad chest in a tailored suit, adjusting tie, buttoning jacket, and walking toward camera. Soft depth of field, clean highlights, confident posture, natural motion.</div>
+        <button onclick="copyPrompt('p9')">Copy Prompt</button>
+      </div>
+      <div class="card">
+        <h2>10. 咖啡廳日系</h2>
+        <p>文青感，微動作微表情。</p>
+        <div class="prompt" id="p10">A warm cafe scene: Asian handsome man with broad chest in casual knitwear, sipping coffee, slight smile, natural eye movements. Slow handheld camera, ambient cafe lighting, realistic breathing.</div>
+        <button onclick="copyPrompt('p10')">Copy Prompt</button>
+      </div>
+      <div class="card">
+        <h2>11. 海邊日出</h2>
+        <p>光影+輪廓，動作慢。</p>
+        <div class="prompt" id="p11">Cinematic sunrise clip: Asian super handsome guy with broad chest in a light open shirt (still clothed), walking along the beach, wind affecting hair and fabric. Slow camera, natural reflections, no scene reset.</div>
+        <button onclick="copyPrompt('p11')">Copy Prompt</button>
+      </div>
+      <div class="card">
+        <h2>12. 工作室拍攝</h2>
+        <p>像廣告片，鏡頭慢，無誇張。</p>
+        <div class="prompt" id="p12">Studio-style portrait video: Asian super handsome male with broad chest, minimal posing, subtle head turns, camera slow orbit. Controlled lighting with soft shadows, realistic skin and eyes, no CGI look.</div>
+        <button onclick="copyPrompt('p12')">Copy Prompt</button>
+      </div>
+      <div class="card">
+        <h2>13. 朋友聚會</h2>
+        <p>多人互動，保持人物清晰。</p>
+        <div class="prompt" id="p13">Group casual clip: Asian super handsome guy with broad chest plus 2–3 friends, laughing and chatting. Keep the main subject clear, natural eye contact, believable gestures, realistic lighting, no sudden cuts.</div>
+        <button onclick="copyPrompt('p13')">Copy Prompt</button>
+      </div>
+      <div class="card">
+        <h2>14. 夜店入口氣場</h2>
+        <p>人群背景+主角行入鏡。</p>
+        <div class="prompt" id="p14">Nightlife entrance scene: handsome Asian man with broad chest, stepping past people into a club entrance. Slow tracking shot, cool highlights, confident movement, ambient music vibe (no sound), cinematic depth.</div>
+        <button onclick="copyPrompt('p14')">Copy Prompt</button>
+      </div>
+      <div class="card">
+        <h2>15. 雨天情緒片</h2>
+        <p>利用水花、反光、情緒沉靜。</p>
+        <div class="prompt" id="p15">Rainy cinematic video: Asian super handsome guy with broad chest in a dark coat, standing under soft rain, water droplets visible, reflective streets. Subtle breathing, calm expression, slow camera push-in.</div>
+        <button onclick="copyPrompt('p15')">Copy Prompt</button>
+      </div>
+      <div class="card">
+        <h2>16. 走廊微電影</h2>
+        <p>短故事感，主角行去出口。</p>
+        <div class="prompt" id="p16">A short hallway story: Asian handsome man with broad chest walking down a corridor toward light, slight shoulder turn, calm pace. Keep continuity of lighting and environment, no new characters added mid-shot.</div>
+        <button onclick="copyPrompt('p16')">Copy Prompt</button>
+      </div>
+      <div class="card">
+        <h2>17. 街頭攝影師風</h2>
+        <p>像 street fashion vlog。</p>
+        <div class="prompt" id="p17">Street fashion clip: Asian super handsome man with broad chest wearing a fitted tee and bomber jacket, standing, adjusting bag strap, casual confidence. Camera follows with smooth gimbal feel, realistic city ambient lighting.</div>
+        <button onclick="copyPrompt('p17')">Copy Prompt</button>
+      </div>
+      <div class="card">
+        <h2>18. 球場休閒</h2>
+        <p>籃球場/跑道，動作簡單。</p>
+        <div class="prompt" id="p18">Outdoor sporty clip: Asian super handsome guy with broad chest in a fitted athletic top, dribbling a basketball slowly or tying shoelaces. Keep movement natural, no extreme motion blur, cinematic framing.</div>
+        <button onclick="copyPrompt('p18')">Copy Prompt</button>
+      </div>
+      <div class="card">
+        <h2>19. 室內訓練</h2>
+        <p>瑜伽/拉筋，重視呼吸節奏。</p>
+        <div class="prompt" id="p19">Indoor training session: Asian super handsome man with broad chest in comfortable sportswear, doing slow stretch or deep breathing. Focus on calm, precise movement, soft lighting, realistic skin and hands.</div>
+        <button onclick="copyPrompt('p19')">Copy Prompt</button>
+      </div>
+      <div class="card">
+        <h2>20. 行山短片</h2>
+        <p>風景帶，慢慢行鏡。</p>
+        <div class="prompt" id="p20">Nature hike clip: Asian handsome guy with broad chest in outdoor jacket, walking through forest path, sunlight filtering. Slow dolly shot, realistic breathing and posture, no abrupt scene change.</div>
+        <button onclick="copyPrompt('p20')">Copy Prompt</button>
+      </div>
+      <div class="card">
+        <h2>21. 車窗倒影</h2>
+        <p>偏文藝、光影反射。</p>
+        <div class="prompt" id="p21">Artistic window reflection scene: handsome Asian man with broad chest, leaning by a window or car door, reflections and soft bokeh, gentle head movement, subtle emotion. Cinematic slow camera movement.</div>
+        <button onclick="copyPrompt('p21')">Copy Prompt</button>
+      </div>
+      <div class="card">
+        <h2>22. 愛情戲剪影</h2>
+        <p>男女/男男都可以，但要正常和合規。</p>
+        <div class="prompt" id="p22">Cinematic romance vibe: Asian super handsome guy with broad chest interacting with a partner (holding hands or gentle hug, fully clothed). Keep interaction tasteful, natural facial reactions, warm lighting, realistic motion.</div>
+        <button onclick="copyPrompt('p22')">Copy Prompt</button>
+      </div>
+      <div class="card">
+        <h2>23. 藝術館男神</h2>
+        <p>寧靜、鏡頭跟背影走。</p>
+        <div class="prompt" id="p23">Minimal, museum-style clip: Asian handsome man with broad chest in a clean outfit, walking slowly, turning to look at art. Soft indoor lighting, subtle head turns, no sudden jump cuts.</div>
+        <button onclick="copyPrompt('p23')">Copy Prompt</button>
+      </div>
+      <div class="card">
+        <h2>24. 階梯動態</h2>
+        <p>走樓梯/回頭，鏡頭平順。</p>
+        <div class="prompt" id="p24">Stairway cinematic clip: Asian super handsome guy with broad chest ascending stairs, slight pause to look back. Smooth camera follow, realistic breathing, clothing movement natural.</div>
+        <button onclick="copyPrompt('p24')">Copy Prompt</button>
+      </div>
+      <div class="card">
+        <h2>25. 廣告式笑容</h2>
+        <p>自然微笑，無假笑。</p>
+        <div class="prompt" id="p25">Commercial-style video: Asian super handsome male with broad chest, giving a subtle genuine smile and natural eye movement. Soft key light, clean background, ultra-realistic skin texture, no plastic look.</div>
+        <button onclick="copyPrompt('p25')">Copy Prompt</button>
+      </div>
+      <div class="card">
+        <h2>26. 大片感街跑</h2>
+        <p>短距離慢跑，動作細節。</p>
+        <div class="prompt" id="p26">Cinematic jog scene: handsome Asian man with broad chest running lightly in fitted sportswear. Keep pace relaxed, focus on breathing, arm swing, realistic sweat glint, stabilized camera.</div>
+        <button onclick="copyPrompt('p26')">Copy Prompt</button>
+      </div>
+      <div class="card">
+        <h2>27. 天台沉思</h2>
+        <p>微風吹衣服，臉部表情微變。</p>
+        <div class="prompt" id="p27">Rooftop contemplative clip: Asian super handsome guy with broad chest, standing against skyline, wind moving hair/clothes, subtle expression change. Slow dolly or pan, dramatic yet realistic lighting.</div>
+        <button onclick="copyPrompt('p27')">Copy Prompt</button>
+      </div>
+      <div class="card">
+        <h2>28. 多人街頭走位</h2>
+        <p>背景有群眾，主角清楚。</p>
+        <div class="prompt" id="p28">Busy street clip with crowd: keep the Asian super handsome main subject with broad chest in focus, walking diagonally through people. Smooth motion, natural speed, realistic ambient lighting, no abrupt transitions.</div>
+        <button onclick="copyPrompt('p28')">Copy Prompt</button>
+      </div>
+      <div class="card">
+        <h2>29. 夜跑城市</h2>
+        <p>霓虹、冷暖光交錯。</p>
+        <div class="prompt" id="p29">Night city run: Asian super handsome guy with broad chest in fitted running top, jogging past neon signs. Cinematic slow-motion moments, realistic perspiration, soft depth of field, smooth camera movement.</div>
+        <button onclick="copyPrompt('p29')">Copy Prompt</button>
+      </div>
+      <div class="card">
+        <h2>30. 聚會合照前</h2>
+        <p>多人準備合照，主角整理衣服。</p>
+        <div class="prompt" id="p30">Social gathering scene: multiple friends pose for a group photo; main subject (handsome Asian with broad chest) adjusting shirt/jacket, smiling slightly, everyone naturally shifting weight. Keep continuity, realistic lighting.</div>
+        <button onclick="copyPrompt('p30')">Copy Prompt</button>
+      </div>
+      <div class="card">
+        <h2>31. 舞蹈房練習</h2>
+        <p>舞步簡單，重點律動。</p>
+        <div class="prompt" id="p31">Dance studio clip: Asian super handsome man with broad chest practicing simple choreography with 1–2 teammates (fully clothed). Smooth motions, natural footwork, cinematic reflections, realistic breath.</div>
+        <button onclick="copyPrompt('p31')">Copy Prompt</button>
+      </div>
+      <div class="card">
+        <h2>32. 商務電梯口</h2>
+        <p>沉著氣場，短故事。</p>
+        <div class="prompt" id="p32">Elevator lobby vibe: handsome Asian man with broad chest in smart casual outfit, waiting, checking watch, subtle head turn. Slow camera push, clean modern lighting, realistic motion.</div>
+        <button onclick="copyPrompt('p32')">Copy Prompt</button>
+      </div>
+      <div class="card">
+        <h2>33. 雪地外套</h2>
+        <p>冷感畫面，呼氣白霧。</p>
+        <div class="prompt" id="p33">Winter cinematic clip: Asian super handsome guy with broad chest wearing a thick coat, visible breath in cold air, walking slowly. Keep realism in fabric and lighting, no scene jump.</div>
+        <button onclick="copyPrompt('p33')">Copy Prompt</button>
+      </div>
+      <div class="card">
+        <h2>34. 室內光影舞台</h2>
+        <p>用光切出輪廓，動作微。</p>
+        <div class="prompt" id="p34">Stage-like lighting clip: Asian super handsome man with broad chest, standing under spotlights and turning slowly. Focus on silhouette, broad chest shape via clothing, realistic skin and eyes.</div>
+        <button onclick="copyPrompt('p34')">Copy Prompt</button>
+      </div>
+      <div class="card">
+        <h2>35. 朋友車內旅程</h2>
+        <p>車內多人，主角側面。</p>
+        <div class="prompt" id="p35">Car interior road trip: main subject (handsome Asian with broad chest) in passenger seat, chatting with friends, natural laughs, light passing through windows. Keep intimacy and realism, no sudden cuts.</div>
+        <button onclick="copyPrompt('p35')">Copy Prompt</button>
+      </div>
+      <div class="card">
+        <h2>36. 結尾停格卡</h2>
+        <p>用黎收尾，順住停住。</p>
+        <div class="prompt" id="p36">Ending moment: handsome Asian main subject with broad chest completes a simple action and settles into a composed pose. Let the clip naturally stop, no extra actions, keep lighting and scene consistent.</div>
+        <button onclick="copyPrompt('p36')">Copy Prompt</button>
+      </div>
     </div>
-
-    <div class="card">
-      <h2>2. 故事延伸 Scene</h2>
-      <p>適合做第 2、3、4 段延伸影片，避免突然轉場。</p>
-      <div class="prompt" id="p2">Continue directly from the previous scene. Maintain the same character, same location, same lighting, same emotional tone, and same cinematic style. Extend the action naturally as if this is the next 8-second part of the same story. Do not reset the scene. Do not introduce new characters unless already visible.</div>
-      <button onclick="copyPrompt('p2')">Copy Prompt</button>
-    </div>
-
-    <div class="card">
-      <h2>3. 情緒互動影片</h2>
-      <p>適合人物之間有眼神、距離、表情變化。</p>
-      <div class="prompt" id="p3">Generate a realistic emotional interaction scene. The characters maintain natural eye contact, subtle facial reactions, small hand gestures, and believable body language. The mood should feel intimate, warm, cinematic, and human. Avoid exaggerated acting, avoid artificial expressions, and keep the motion realistic.</div>
-      <button onclick="copyPrompt('p3')">Copy Prompt</button>
-    </div>
-
-    <div class="card">
-      <h2>4. IG Reels 戲劇感</h2>
-      <p>適合短片開頭有強烈畫面吸引力。</p>
-      <div class="prompt" id="p4">Create a highly engaging vertical cinematic video for Instagram Reels. Start with a strong visual hook in the first second. Use expressive body language, clear emotional contrast, and smooth camera movement. The scene should feel realistic, stylish, and instantly understandable without dialogue.</div>
-      <button onclick="copyPrompt('p4')">Copy Prompt</button>
-    </div>
-
-    <div class="card">
-      <h2>5. 超寫實人物鏡頭</h2>
-      <p>適合提升真實感、去 AI 感。</p>
-      <div class="prompt" id="p5">Ultra-realistic cinematic portrait video, natural skin texture, realistic eyes, subtle imperfections, authentic facial movement, soft natural lighting, shallow depth of field, professional camera look, no plastic skin, no CGI feeling, no artificial smile, no distorted hands.</div>
-      <button onclick="copyPrompt('p5')">Copy Prompt</button>
-    </div>
-
-    <div class="card">
-      <h2>6. 影片收尾停格</h2>
-      <p>適合結尾自然停住，不會亂延伸。</p>
-      <div class="prompt" id="p6">End the clip naturally once the main action is completed. The character should settle into a calm resting pose, with mouth movement stopped, relaxed facial expression, and stable body posture. Do not add extra actions after the scene objective is finished.</div>
-      <button onclick="copyPrompt('p6')">Copy Prompt</button>
-    </div>
-
   </div>
-</div>
 
-<footer>
-  Grok Prompt System © 2026
-</footer>
+  <footer>
+    <p>Grok Video Prompt Menu — updated with 36 scenes</p>
+    <p>Login required via basic auth: set in Cloudflare Pages env variables (SITE_USERNAME / SITE_PASSWORD)</p>
+  </footer>
 
-<script>
-function copyPrompt(id) {
-  const text = document.getElementById(id).innerText;
-  navigator.clipboard.writeText(text).then(() => {
-    alert("Prompt copied!");
-  });
-}
-</script>
-
+  <script>
+    function copyPrompt(id) {
+      const text = document.getElementById(id).innerText;
+      navigator.clipboard.writeText(text);
+      alert('Copied!');
+    }
+  </script>
 </body>
 </html>
