@@ -1,13 +1,148 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Grok Video Prompt Workbench</title>
-<script src="https://cdn.tailwindcss.com"></script>
-<body style="background:#0a0a0a;color:white;font-family:Arial;padding:40px">
-<h1>Enhanced Grok Prompt Workbench</h1>
-<p>Enhanced version deployed successfully.</p>
-<p>36 scenes + prompt catalog + cumulative prompt builder</p>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Grok Video Prompt Workbench</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root{--bg:#07070a;--card:#11131a;--line:#272a36;--muted:#9ca3af;--accent:#22c55e;--blue:#38bdf8;--pink:#fb7185;--amber:#f59e0b}
+    *{box-sizing:border-box} body{margin:0;background:radial-gradient(circle at top left,#172033 0,#07070a 38%,#050506 100%);color:#f8fafc;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,"Noto Sans TC",sans-serif}
+    .glass{background:rgba(17,19,26,.86);border:1px solid rgba(148,163,184,.2);box-shadow:0 24px 80px rgba(0,0,0,.35);backdrop-filter:blur(16px)}
+    .pill{border:1px solid #334155;background:#0f172a;color:#cbd5e1;border-radius:999px;padding:8px 12px;font-size:13px;cursor:pointer;transition:.2s}.pill:hover,.pill.active{background:#16a34a;color:#fff;border-color:#22c55e}
+    .card{background:linear-gradient(180deg,rgba(17,24,39,.98),rgba(9,11,17,.98));border:1px solid rgba(148,163,184,.18);border-radius:24px;padding:20px;transition:.25s}.card:hover{transform:translateY(-3px);border-color:rgba(34,197,94,.55);box-shadow:0 18px 48px rgba(0,0,0,.36)}
+    .prompt{white-space:pre-wrap;background:#030712;border:1px solid #1f2937;border-radius:16px;padding:14px;color:#d1fae5;font-size:13px;line-height:1.55;max-height:180px;overflow:auto}.btn{border:0;border-radius:14px;padding:11px 14px;font-weight:700;cursor:pointer;transition:.2s}.btn:hover{transform:translateY(-1px)}.btn-green{background:#22c55e;color:#04130a}.btn-blue{background:#38bdf8;color:#06111a}.btn-dark{background:#1f2937;color:#e5e7eb}.btn-red{background:#fb7185;color:#190207}.field{background:#030712;border:1px solid #334155;border-radius:16px;color:#fff;padding:13px 15px;outline:none}.field:focus{border-color:#22c55e}.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:99;background:#16a34a;color:white;padding:13px 18px;border-radius:18px;box-shadow:0 20px 60px rgba(0,0,0,.45)}
+    @media(max-width:980px){.layout{grid-template-columns:1fr!important}.sticky{position:relative!important;top:auto!important}}
+  </style>
+</head>
+<body>
+  <header class="px-5 py-10 md:px-10 border-b border-slate-800">
+    <div class="max-w-7xl mx-auto grid md:grid-cols-[1.3fr_.7fr] gap-6 items-end">
+      <div>
+        <div class="inline-flex gap-2 items-center text-xs tracking-widest uppercase text-emerald-300 bg-emerald-400/10 border border-emerald-400/20 px-3 py-1 rounded-full mb-4">Grok Imagine · Prompt Workbench · Pro</div>
+        <h1 class="text-4xl md:text-6xl font-black leading-tight">Grok Video Prompt<br><span class="text-emerald-400">Workbench</span></h1>
+        <p class="mt-4 text-slate-300 text-lg max-w-2xl">36 個影片場景 × Grok 模組庫 × 累積 Prompt Builder。適合快速組合 ENFORCE / AVOID / continuity lock / cinematic motion 指令。</p>
+      </div>
+      <div class="glass rounded-3xl p-5">
+        <div class="grid grid-cols-3 gap-3 text-center">
+          <div><div class="text-3xl font-black text-emerald-400" id="statScenes">36</div><div class="text-xs text-slate-400">Scenes</div></div>
+          <div><div class="text-3xl font-black text-sky-400" id="statSelected">0</div><div class="text-xs text-slate-400">Selected</div></div>
+          <div><div class="text-3xl font-black text-amber-400">12</div><div class="text-xs text-slate-400">Modules</div></div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto p-5 md:p-8">
+    <section class="glass rounded-3xl p-5 md:p-6 mb-8">
+      <div class="grid md:grid-cols-[1fr_auto] gap-4 items-center">
+        <input id="search" class="field w-full" placeholder="搜尋：gym / street / suit / romance / continuity / camera..." oninput="renderScenes()" />
+        <div class="flex gap-2 flex-wrap" id="filters"></div>
+      </div>
+    </section>
+
+    <div class="layout grid grid-cols-[260px_1fr_360px] gap-6">
+      <aside class="glass rounded-3xl p-5 h-fit sticky top-5">
+        <h2 class="text-xl font-black mb-3">Prompt 模組庫</h2>
+        <p class="text-sm text-slate-400 mb-4">點擊加入右邊累積區。</p>
+        <div id="modules" class="space-y-3"></div>
+      </aside>
+
+      <section>
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-2xl font-black">36 Scenes Menu</h2>
+          <button class="btn btn-dark" onclick="copyVisible()">Copy Visible Scenes</button>
+        </div>
+        <div id="sceneGrid" class="grid md:grid-cols-2 xl:grid-cols-3 gap-5"></div>
+      </section>
+
+      <aside class="glass rounded-3xl p-5 h-fit sticky top-5">
+        <div class="flex items-center justify-between gap-3 mb-3">
+          <h2 class="text-xl font-black">累積 Prompt Builder</h2>
+          <span id="count" class="text-xs bg-slate-800 px-3 py-1 rounded-full">0 items</span>
+        </div>
+        <textarea id="builder" class="field w-full min-h-[330px] text-sm leading-relaxed" placeholder="按 Add to Builder，把場景 / 模組組合到這裡..."></textarea>
+        <div class="grid grid-cols-2 gap-3 mt-4">
+          <button class="btn btn-green" onclick="copyBuilder()">Copy All</button>
+          <button class="btn btn-blue" onclick="exportTxt()">Export TXT</button>
+          <button class="btn btn-dark" onclick="addChain()">Add Chain</button>
+          <button class="btn btn-red" onclick="resetBuilder()">Reset</button>
+        </div>
+        <div class="mt-5 border-t border-slate-700 pt-4">
+          <h3 class="font-bold mb-2">Scene Chain Template</h3>
+          <div class="prompt text-xs">Scene [#]: Continue directly from the final frame of Scene [#-1]. Keep the same character identity, outfit, lighting, camera lens, environment, and motion rhythm. No scene reset, no face drift, no body proportion change.</div>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+<script>
+const categories=['all','original','street','gym','business','cinematic','romance','group','outdoor','studio'];let active='all';let selected=[];
+const modules=[
+ {t:'Character Continuity Lock',x:'ENFORCE: same face, same body proportions, same hairstyle, same outfit, same age, same skin texture, same identity across every frame. Avoid face drift, body morphing, clothing change, or sudden new character.'},
+ {t:'Scene Chain',x:'Scene [#]: continue directly from the final frame of Scene [#-1]. Preserve the exact pose direction, camera angle, lighting setup, color grade, background layout, and emotional rhythm.'},
+ {t:'Cinematic Camera',x:'CAMERA: smooth gimbal tracking, slow push-in, subtle orbit, 85mm lens look, shallow depth of field, natural handheld micro-movement, no shaky random zoom.'},
+ {t:'Realistic Motion',x:'MOTION: natural breathing, controlled steps, small realistic gestures, believable body weight shift, fabric movement reacting to body and wind.'},
+ {t:'Premium Lighting',x:'LIGHTING: soft cinematic highlights, realistic shadows, natural reflections, balanced skin tone, no plastic skin, no CGI glow.'},
+ {t:'Grok Quality Boost',x:'QUALITY: photorealistic, DSLR look, 8K detail, cinematic color grading, realistic skin pores, natural eyes, believable environment, no AI artifacts.'},
+ {t:'ENFORCE Block',x:'ENFORCE: photorealism, clear hands, stable face, consistent outfit, continuous background, realistic physics, natural expression, professional film look.'},
+ {t:'AVOID Block',x:'AVOID: extra fingers, warped hands, duplicated face, face change, body distortion, sudden outfit change, over-smoothed skin, CGI look, text overlay, watermark, blurry face.'},
+ {t:'Fashion Editorial',x:'STYLE: high-end fashion editorial, confident posture, clean composition, premium wardrobe silhouette, commercial advertising quality, tasteful and fully clothed.'},
+ {t:'Gym Safe Style',x:'GYM STYLE: fitted sportswear, confident training posture, controlled reps, sweat highlight, strong athletic presence, fully clothed, professional fitness commercial look.'},
+ {t:'Romance Safe Style',x:'ROMANCE STYLE: tasteful connection, gentle eye contact, holding hands or soft hug, fully clothed, warm lighting, subtle emotion, no explicit action.'},
+ {t:'Negative Prompt',x:'NEGATIVE: nudity, explicit sexual action, distorted anatomy, unrealistic muscles, bad hands, bad teeth, inconsistent face, low resolution, oversaturated colors, motion glitch.'}
+];
+const scenes=[
+ {n:1,c:'original',t:'非洲型男行走風',d:'國外型男街頭影片。',p:'Generate an 8-second cinematic clip: African handsome man with broad muscular chest, walking in a fitted shirt and jeans. Superior quality, 8K, DSLR, photorealistic, sportswear fashion, natural walking motion.'},
+ {n:2,c:'original business',t:'黑西裝纖瘦氣質',d:'精緻商務電影感。',p:'Generate a short clip: slim African man in a fitted suit, standing and walking with elegance. 8K quality, cinematic lighting, film grain, DSLR shot, realistic posture and natural movement.'},
+ {n:3,c:'original gym',t:'白人健身帥',d:'健身感，影片質感。',p:'Generate an 8-second video clip: handsome white man in gym style, strong athletic body, tight workout outfit. Keep realistic motion, high quality, cinematic lighting, 8K, no exaggerated acting.'},
+ {n:4,c:'street',t:'亞洲小鮮肉 Vlog',d:'韓式、街頭 Vlog 感。',p:'Generate a high quality cinematic vlog clip: Asian young handsome man, stylish outfit, walking on urban street, turning head casually. 8K DSLR look, realistic skin and lighting.'},
+ {n:5,c:'group',t:'全民網紅合照風',d:'多人合照，主角位清晰。',p:'Generate a short cinematic video: group of handsome Asian guys and attractive friends taking a photo together. Keep the main subject in the center and clear. Realistic lighting, film look, 8K quality.'},
+ {n:6,c:'cinematic',t:'主線廣告式輸出',d:'聚焦亞裔主角，像廣告片。',p:'Generate a cinematic promo video: stunning realism based on the described scene, very nice looking Asian man. Keep continuous character, clear environment, photoreal 8K, commercial advertising quality.'},
+ {n:7,c:'street',t:'亞洲型男街頭風',d:'夜色城市，走路 / 回頭 / 整理衣服。',p:'Cinematic 8-second video of an Asian super handsome guy with a broad chest wearing a fitted white tee and denim jacket, walking through a neon-lit street. Slow tracking shot, natural breathing, small gestures like adjusting sleeves, realistic lighting and shadows.'},
+ {n:8,c:'gym',t:'健身房質感片段',d:'自然動作、汗光、肌肉線條但不裸露。',p:'Shoot a realistic gym clip: Asian super handsome guy with broad chest in a fitted tank, doing slow controlled reps. Focus on motion quality, breath, subtle muscle definition, cinematic lighting, no exaggerated acting, fully clothed.'},
+ {n:9,c:'business',t:'黑西裝氣場',d:'衣著輪廓 + 氣場。',p:'High-end cinematic video: Asian super handsome man with broad chest in a tailored suit, adjusting tie, buttoning jacket, and walking toward camera. Soft depth of field, clean highlights, confident posture, natural motion.'},
+ {n:10,c:'cinematic',t:'咖啡廳日系',d:'文青感，微動作微表情。',p:'A warm cafe scene: Asian handsome man with broad chest in casual knitwear, sipping coffee, slight smile, natural eye movements. Slow handheld camera, ambient cafe lighting, realistic breathing.'},
+ {n:11,c:'outdoor',t:'海邊日出',d:'光影 + 輪廓，動作慢。',p:'Cinematic sunrise clip: Asian super handsome guy with broad chest in a light open shirt, walking along the beach, wind affecting hair and fabric. Slow camera, natural reflections, no scene reset.'},
+ {n:12,c:'studio',t:'工作室拍攝',d:'廣告片感，鏡頭慢。',p:'Studio-style portrait video: Asian super handsome male with broad chest, minimal posing, subtle head turns, camera slow orbit. Controlled lighting with soft shadows, realistic skin and eyes, no CGI look.'},
+ {n:13,c:'group',t:'朋友聚會',d:'多人互動，保持人物清晰。',p:'Group casual clip: Asian super handsome guy with broad chest plus 2–3 friends, laughing and chatting. Keep the main subject clear, natural eye contact, believable gestures, realistic lighting, no sudden cuts.'},
+ {n:14,c:'cinematic street',t:'夜店入口氣場',d:'人群背景 + 主角行入鏡。',p:'Nightlife entrance scene: handsome Asian man with broad chest, stepping past people into a club entrance. Slow tracking shot, cool highlights, confident movement, ambient nightlife vibe, cinematic depth.'},
+ {n:15,c:'cinematic',t:'雨天情緒片',d:'水花、反光、沉靜情緒。',p:'Rainy cinematic video: Asian super handsome guy with broad chest in a dark coat, standing under soft rain, water droplets visible, reflective streets. Subtle breathing, calm expression, slow camera push-in.'},
+ {n:16,c:'cinematic',t:'走廊微電影',d:'短故事感，主角行去出口。',p:'A short hallway story: Asian handsome man with broad chest walking down a corridor toward light, slight shoulder turn, calm pace. Keep continuity of lighting and environment, no new characters added mid-shot.'},
+ {n:17,c:'street',t:'街頭攝影師風',d:'Street fashion vlog。',p:'Street fashion clip: Asian super handsome man with broad chest wearing a fitted tee and bomber jacket, standing, adjusting bag strap, casual confidence. Camera follows with smooth gimbal feel, realistic city ambient lighting.'},
+ {n:18,c:'outdoor gym',t:'球場休閒',d:'籃球場 / 跑道，動作簡單。',p:'Outdoor sporty clip: Asian super handsome guy with broad chest in a fitted athletic top, dribbling a basketball slowly or tying shoelaces. Keep movement natural, no extreme motion blur, cinematic framing.'},
+ {n:19,c:'gym studio',t:'室內訓練',d:'瑜伽 / 拉筋，重視呼吸節奏。',p:'Indoor training session: Asian super handsome man with broad chest in comfortable sportswear, doing slow stretch or deep breathing. Focus on calm, precise movement, soft lighting, realistic skin and hands.'},
+ {n:20,c:'outdoor',t:'行山短片',d:'風景帶，慢慢行鏡。',p:'Nature hike clip: Asian handsome guy with broad chest in outdoor jacket, walking through forest path, sunlight filtering. Slow dolly shot, realistic breathing and posture, no abrupt scene change.'},
+ {n:21,c:'cinematic',t:'車窗倒影',d:'文藝光影反射。',p:'Artistic window reflection scene: handsome Asian man with broad chest, leaning by a window or car door, reflections and soft bokeh, gentle head movement, subtle emotion. Cinematic slow camera movement.'},
+ {n:22,c:'romance',t:'愛情戲剪影',d:'合規、溫柔、全程有衣著。',p:'Cinematic romance vibe: Asian super handsome guy with broad chest interacting with a partner, holding hands or gentle hug, fully clothed. Keep interaction tasteful, natural facial reactions, warm lighting, realistic motion.'},
+ {n:23,c:'studio cinematic',t:'藝術館男神',d:'寧靜，鏡頭跟背影走。',p:'Minimal museum-style clip: Asian handsome man with broad chest in a clean outfit, walking slowly, turning to look at art. Soft indoor lighting, subtle head turns, no sudden jump cuts.'},
+ {n:24,c:'cinematic',t:'階梯動態',d:'走樓梯 / 回頭，鏡頭平順。',p:'Stairway cinematic clip: Asian super handsome guy with broad chest ascending stairs, slight pause to look back. Smooth camera follow, realistic breathing, clothing movement natural.'},
+ {n:25,c:'business cinematic',t:'廣告式笑容',d:'自然微笑，無假笑。',p:'Commercial-style video: Asian super handsome man with broad chest smiling naturally to camera, walking in a bright clean environment. Soft highlights, professional advertising look, realistic eyes and facial muscles.'},
+ {n:26,c:'studio',t:'香水廣告感',d:'近鏡，慢動作，乾淨高級。',p:'Luxury fragrance commercial vibe: handsome Asian man in premium outfit, slow head turn, clean background, soft cinematic light, shallow depth of field, natural confidence, tasteful styling.'},
+ {n:27,c:'outdoor',t:'城市天台',d:'風景、天空線、慢鏡。',p:'Rooftop city scene: Asian handsome man with broad chest in smart casual outfit, standing near skyline, wind gently moving clothes, slow camera orbit, cinematic sunset light, realistic shadows.'},
+ {n:28,c:'business',t:'高級酒店 Lobby',d:'商務高端，從容行走。',p:'Luxury hotel lobby video: Asian super handsome man in tailored smart casual outfit, walking through marble lobby, subtle smile, confident body language, cinematic camera tracking, premium lifestyle commercial mood.'},
+ {n:29,c:'street cinematic',t:'地鐵站電影感',d:'城市流動、人群背景。',p:'Cinematic metro station clip: Asian handsome man standing on platform then walking calmly, background people slightly blurred, stable face, realistic crowd movement, urban film color grading.'},
+ {n:30,c:'studio gym',t:'健身品牌廣告',d:'品牌式力量感。',p:'Fitness brand commercial: Asian handsome athletic man in fitted sportswear, preparing equipment, controlled movement, confident posture, sweat highlights, clean gym background, 8K photorealistic.'},
+ {n:31,c:'cinematic',t:'慢鏡回頭',d:'可接任何場景。',p:'Slow cinematic head-turn shot: keep same character identity, same outfit and environment, gentle eye movement, natural breathing, subtle facial expression, smooth camera push-in, no face drift.'},
+ {n:32,c:'group romance',t:'朋友晚餐',d:'社交高端，人與人連結。',p:'Warm dinner gathering clip: Asian handsome man with friends at a stylish restaurant, laughing naturally, holding a glass, soft warm light, believable table interaction, main subject clear and consistent.'},
+ {n:33,c:'outdoor street',t:'香港街頭電影感',d:'本地城市質感。',p:'Hong Kong cinematic street clip: Asian handsome man walking through a vibrant urban street, neon signs, realistic crowd, humid night reflections, smooth tracking shot, stable face and outfit continuity.'},
+ {n:34,c:'studio cinematic',t:'室內光影舞台',d:'用光切出輪廓，動作微。',p:'Stage-like lighting clip: Asian super handsome man with broad chest, standing under spotlights and turning slowly. Focus on silhouette through clothing, realistic skin and eyes, premium editorial mood.'},
+ {n:35,c:'group cinematic',t:'朋友車內旅程',d:'車內多人，主角側面。',p:'Road trip car interior clip: Asian handsome man in passenger seat with friends, city lights passing outside, natural conversation expression, main subject clear, reflections on window, cinematic handheld realism.'},
+ {n:36,c:'cinematic',t:'終章 Hero Shot',d:'可用作片尾主鏡。',p:'Final hero shot: Asian super handsome man walking toward camera with calm confidence, premium cinematic lighting, stable identity, natural movement, no sudden cuts, strong closing frame ready for next scene.'}
+];
+function el(id){return document.getElementById(id)}
+function toast(msg){const d=document.createElement('div');d.className='toast';d.textContent=msg;document.body.appendChild(d);setTimeout(()=>d.remove(),1800)}
+function copyText(t){navigator.clipboard.writeText(t).then(()=>toast('已複製'))}
+function add(t){selected.push(t);el('builder').value=selected.join('\n\n---\n\n');el('count').textContent=selected.length+' items';el('statSelected').textContent=selected.length;toast('已加入 Builder')}
+function renderFilters(){el('filters').innerHTML=categories.map(c=>`<button class="pill ${active===c?'active':''}" onclick="active='${c}';renderFilters();renderScenes()">${c}</button>`).join('')}
+function renderModules(){el('modules').innerHTML=modules.map(m=>`<div class="card !p-4"><div class="font-bold text-emerald-300 mb-2">${m.t}</div><div class="text-xs text-slate-400 leading-relaxed mb-3">${m.x.slice(0,118)}...</div><div class="grid grid-cols-2 gap-2"><button class="btn btn-green !py-2" onclick='add(${JSON.stringify(m.x)})'>Add</button><button class="btn btn-dark !py-2" onclick='copyText(${JSON.stringify(m.x)})'>Copy</button></div></div>`).join('')}
+function renderScenes(){const q=el('search').value.toLowerCase().trim();let list=scenes.filter(s=>(active==='all'||s.c.includes(active)) && (!q||(s.t+s.d+s.p+s.c).toLowerCase().includes(q)));el('sceneGrid').innerHTML=list.map(s=>`<article class="card"><div class="flex justify-between gap-3 mb-2"><h3 class="text-lg font-black">${s.n}. ${s.t}</h3><span class="text-xs text-emerald-300 bg-emerald-400/10 border border-emerald-400/20 rounded-full px-2 py-1 h-fit">${s.c}</span></div><p class="text-sm text-slate-400 mb-4">${s.d}</p><div class="prompt" id="scene-${s.n}">${s.p}</div><div class="grid grid-cols-2 gap-3 mt-4"><button class="btn btn-green" onclick='add(${JSON.stringify(s.p)})'>Add to Builder</button><button class="btn btn-blue" onclick='copyText(${JSON.stringify(s.p)})'>Copy</button></div></article>`).join('')||'<div class="text-slate-400">沒有符合搜尋的場景。</div>'}
+function copyBuilder(){const v=el('builder').value.trim();if(!v)return toast('Builder 是空的');copyText(v)}
+function resetBuilder(){selected=[];el('builder').value='';el('count').textContent='0 items';el('statSelected').textContent='0';toast('已重置')}
+function exportTxt(){const v=el('builder').value.trim();if(!v)return toast('Builder 是空的');const blob=new Blob([v],{type:'text/plain;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='grok-prompt-builder.txt';a.click();URL.revokeObjectURL(a.href)}
+function addChain(){add('Scene [#]: Continue directly from the final frame of Scene [#-1]. Keep the same character identity, outfit, lighting, camera lens, environment, and motion rhythm. No scene reset, no face drift, no body proportion change.')} 
+function copyVisible(){const q=el('search').value.toLowerCase().trim();let list=scenes.filter(s=>(active==='all'||s.c.includes(active)) && (!q||(s.t+s.d+s.p+s.c).toLowerCase().includes(q))).map(s=>`${s.n}. ${s.t}\n${s.p}`).join('\n\n---\n\n');copyText(list)}
+renderFilters();renderModules();renderScenes();
+</script>
 </body>
 </html>
