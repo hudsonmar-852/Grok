@@ -7,12 +7,25 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     :root{--bg:#07070a;--card:#11131a;--line:#272a36;--muted:#9ca3af;--accent:#22c55e;--blue:#38bdf8;--pink:#fb7185;--amber:#f59e0b}
-    *{box-sizing:border-box} body{margin:0;background:radial-gradient(circle at top left,#172033 0,#07070a 38%,#050506 100%);color:#f8fafc;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,"Noto Sans TC",sans-serif}
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{margin:0;background:radial-gradient(circle at top left,#172033 0,#07070a 38%,#050506 100%);color:#f8fafc;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,"Noto Sans TC",sans-serif}
     .glass{background:rgba(17,19,26,.86);border:1px solid rgba(148,163,184,.2);box-shadow:0 24px 80px rgba(0,0,0,.35);backdrop-filter:blur(16px)}
-    .pill{border:1px solid #334155;background:#0f172a;color:#cbd5e1;border-radius:999px;padding:8px 12px;font-size:13px;cursor:pointer;transition:.2s}.pill:hover,.pill.active{background:#16a34a;color:#fff;border-color:#22c55e}
-    .card{background:linear-gradient(180deg,rgba(17,24,39,.98),rgba(9,11,17,.98));border:1px solid rgba(148,163,184,.18);border-radius:24px;padding:20px;transition:.25s}.card:hover{transform:translateY(-3px);border-color:rgba(34,197,94,.55);box-shadow:0 18px 48px rgba(0,0,0,.36)}
-    .prompt{white-space:pre-wrap;background:#030712;border:1px solid #1f2937;border-radius:16px;padding:14px;color:#d1fae5;font-size:13px;line-height:1.55;max-height:180px;overflow:auto}.btn{border:0;border-radius:14px;padding:11px 14px;font-weight:700;cursor:pointer;transition:.2s}.btn:hover{transform:translateY(-1px)}.btn-green{background:#22c55e;color:#04130a}.btn-blue{background:#38bdf8;color:#06111a}.btn-dark{background:#1f2937;color:#e5e7eb}.btn-red{background:#fb7185;color:#190207}.field{background:#030712;border:1px solid #334155;border-radius:16px;color:#fff;padding:13px 15px;outline:none}.field:focus{border-color:#22c55e}.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:99;background:#16a34a;color:white;padding:13px 18px;border-radius:18px;box-shadow:0 20px 60px rgba(0,0,0,.45)}
-    @media(max-width:980px){.layout{grid-template-columns:1fr!important}.sticky{position:relative!important;top:auto!important}}
+    .pill{border:1px solid #334155;background:#0f172a;color:#cbd5e1;border-radius:999px;padding:8px 12px;font-size:13px;cursor:pointer;transition:.2s}.pill:hover,.pill.active{background:#16a34a;color:#fff;border-color:#22c55e;box-shadow:0 0 0 4px rgba(34,197,94,.12)}
+    .card{position:relative;background:linear-gradient(180deg,rgba(17,24,39,.98),rgba(9,11,17,.98));border:1px solid rgba(148,163,184,.18);border-radius:24px;padding:20px;transition:.25s}.card:hover{transform:translateY(-3px);border-color:rgba(34,197,94,.55);box-shadow:0 18px 48px rgba(0,0,0,.36)}
+    .card.added{border-color:#22c55e;box-shadow:0 0 0 4px rgba(34,197,94,.18),0 18px 48px rgba(0,0,0,.36)}
+    .card.added::after{content:'Added';position:absolute;top:12px;right:12px;background:#22c55e;color:#04130a;font-size:11px;font-weight:900;padding:5px 9px;border-radius:999px;animation:pop .45s ease}
+    .prompt{white-space:pre-wrap;background:#030712;border:1px solid #1f2937;border-radius:16px;padding:14px;color:#d1fae5;font-size:13px;line-height:1.55;max-height:180px;overflow:auto}
+    .btn{border:0;border-radius:14px;padding:11px 14px;font-weight:800;cursor:pointer;transition:.18s;user-select:none}.btn:hover{transform:translateY(-1px)}.btn:active{transform:scale(.98)}
+    .btn-green{background:#22c55e;color:#04130a}.btn-blue{background:#38bdf8;color:#06111a}.btn-dark{background:#1f2937;color:#e5e7eb}.btn-red{background:#fb7185;color:#190207}.btn-amber{background:#f59e0b;color:#150b00}
+    .field{background:#030712;border:1px solid #334155;border-radius:16px;color:#fff;padding:13px 15px;outline:none}.field:focus{border-color:#22c55e;box-shadow:0 0 0 4px rgba(34,197,94,.12)}
+    #builder{resize:vertical;scroll-behavior:smooth}.builder-flash{animation:builderFlash .55s ease}
+    .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:99;background:#16a34a;color:white;padding:13px 18px;border-radius:18px;box-shadow:0 20px 60px rgba(0,0,0,.45);font-weight:800}
+    .mini{font-size:12px;color:#94a3b8}.fade-in{animation:fadeIn .25s ease}.kbd{border:1px solid #334155;background:#020617;border-radius:8px;padding:2px 7px;color:#cbd5e1;font-size:11px}
+    @keyframes pop{0%{transform:scale(.85);opacity:0}100%{transform:scale(1);opacity:1}}
+    @keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+    @keyframes builderFlash{0%{box-shadow:0 0 0 0 rgba(34,197,94,.5)}100%{box-shadow:0 0 0 8px rgba(34,197,94,0)}}
+    @media(max-width:980px){.layout{grid-template-columns:1fr!important}.sticky{position:relative!important;top:auto!important}.builder-panel{order:-1}}
   </style>
 </head>
 <body>
@@ -21,13 +34,13 @@
       <div>
         <div class="inline-flex gap-2 items-center text-xs tracking-widest uppercase text-emerald-300 bg-emerald-400/10 border border-emerald-400/20 px-3 py-1 rounded-full mb-4">Grok Imagine · Prompt Workbench · Pro</div>
         <h1 class="text-4xl md:text-6xl font-black leading-tight">Grok Video Prompt<br><span class="text-emerald-400">Workbench</span></h1>
-        <p class="mt-4 text-slate-300 text-lg max-w-2xl">36 個影片場景 × Grok 模組庫 × 累積 Prompt Builder。適合快速組合 ENFORCE / AVOID / continuity lock / cinematic motion 指令。</p>
+        <p class="mt-4 text-slate-300 text-lg max-w-2xl">36 個影片場景 × Grok 模組庫 × 累積 Prompt Builder。快速組合 ENFORCE / AVOID / continuity lock / cinematic motion 指令。</p>
       </div>
       <div class="glass rounded-3xl p-5">
         <div class="grid grid-cols-3 gap-3 text-center">
           <div><div class="text-3xl font-black text-emerald-400" id="statScenes">36</div><div class="text-xs text-slate-400">Scenes</div></div>
           <div><div class="text-3xl font-black text-sky-400" id="statSelected">0</div><div class="text-xs text-slate-400">Selected</div></div>
-          <div><div class="text-3xl font-black text-amber-400">12</div><div class="text-xs text-slate-400">Modules</div></div>
+          <div><div class="text-3xl font-black text-amber-400" id="statModules">12</div><div class="text-xs text-slate-400">Modules</div></div>
         </div>
       </div>
     </div>
@@ -41,43 +54,61 @@
       </div>
     </section>
 
-    <div class="layout grid grid-cols-[260px_1fr_360px] gap-6">
+    <div class="layout grid grid-cols-[260px_1fr_390px] gap-6">
       <aside class="glass rounded-3xl p-5 h-fit sticky top-5">
-        <h2 class="text-xl font-black mb-3">Prompt 模組庫</h2>
-        <p class="text-sm text-slate-400 mb-4">點擊加入右邊累積區。</p>
+        <h2 class="text-xl font-black mb-2">Prompt 模組庫</h2>
+        <p class="text-sm text-slate-400 mb-4">點擊 Add 會加入右邊累積區底部。</p>
         <div id="modules" class="space-y-3"></div>
       </aside>
 
       <section>
-        <div class="flex items-center justify-between mb-4">
-          <h2 class="text-2xl font-black">36 Scenes Menu</h2>
-          <button class="btn btn-dark" onclick="copyVisible()">Copy Visible Scenes</button>
+        <div class="flex items-center justify-between gap-3 mb-4">
+          <div>
+            <h2 class="text-2xl font-black">36 Scenes Menu</h2>
+            <p class="mini mt-1">每張卡片可加入 Builder、直接複製，已加入會有綠色提示。</p>
+          </div>
+          <button class="btn btn-dark whitespace-nowrap" onclick="copyVisible()">Copy Visible Scenes</button>
         </div>
         <div id="sceneGrid" class="grid md:grid-cols-2 xl:grid-cols-3 gap-5"></div>
       </section>
 
-      <aside class="glass rounded-3xl p-5 h-fit sticky top-5">
+      <aside id="builderPanel" class="builder-panel glass rounded-3xl p-5 h-fit sticky top-5">
         <div class="flex items-center justify-between gap-3 mb-3">
-          <h2 class="text-xl font-black">累積 Prompt Builder</h2>
+          <div>
+            <h2 class="text-xl font-black">累積 Prompt Builder</h2>
+            <p class="mini mt-1">新增內容會自動加到底部並捲到最新位置。</p>
+          </div>
           <span id="count" class="text-xs bg-slate-800 px-3 py-1 rounded-full">0 items</span>
         </div>
-        <textarea id="builder" class="field w-full min-h-[330px] text-sm leading-relaxed" placeholder="按 Add to Builder，把場景 / 模組組合到這裡..."></textarea>
+        <textarea id="builder" class="field w-full min-h-[360px] text-sm leading-relaxed" placeholder="按 Add to Builder，把場景 / 模組組合到這裡..."></textarea>
         <div class="grid grid-cols-2 gap-3 mt-4">
           <button class="btn btn-green" onclick="copyBuilder()">Copy All</button>
           <button class="btn btn-blue" onclick="exportTxt()">Export TXT</button>
-          <button class="btn btn-dark" onclick="addChain()">Add Chain</button>
+          <button class="btn btn-amber" onclick="addChain()">Add Chain</button>
+          <button class="btn btn-dark" onclick="undoLast()">Undo Last</button>
+          <button class="btn btn-dark" onclick="scrollBuilderBottom()">View Bottom</button>
           <button class="btn btn-red" onclick="resetBuilder()">Reset</button>
         </div>
         <div class="mt-5 border-t border-slate-700 pt-4">
-          <h3 class="font-bold mb-2">Scene Chain Template</h3>
-          <div class="prompt text-xs">Scene [#]: Continue directly from the final frame of Scene [#-1]. Keep the same character identity, outfit, lighting, camera lens, environment, and motion rhythm. No scene reset, no face drift, no body proportion change.</div>
+          <div class="flex items-center justify-between gap-3 mb-2">
+            <h3 class="font-bold">Scene Chain Template</h3>
+            <div class="flex gap-2">
+              <button class="btn btn-green !py-2 !px-3 text-xs" onclick="addTemplateChain(event)">Add to Builder</button>
+              <button class="btn btn-dark !py-2 !px-3 text-xs" onclick="copyText(CHAIN_TEMPLATE)">Copy</button>
+            </div>
+          </div>
+          <div class="prompt text-xs" id="chainTemplateBox"></div>
+          <p class="mini mt-3"><span class="kbd">Add Chain</span> 用途：把下一段影片接續上一段，鎖定同一人物、服裝、光線、鏡頭與動作節奏，避免 Grok 重新生成另一個人或跳場。</p>
         </div>
       </aside>
     </div>
   </main>
 
 <script>
-const categories=['all','original','street','gym','business','cinematic','romance','group','outdoor','studio'];let active='all';let selected=[];
+const categories=['all','original','street','gym','business','cinematic','romance','group','outdoor','studio'];
+let active='all';
+let selected=[];
+const CHAIN_TEMPLATE='Scene [#]: Continue directly from the final frame of Scene [#-1]. Keep the same character identity, outfit, lighting, camera lens, environment, and motion rhythm. No scene reset, no face drift, no body proportion change.';
 const modules=[
  {t:'Character Continuity Lock',x:'ENFORCE: same face, same body proportions, same hairstyle, same outfit, same age, same skin texture, same identity across every frame. Avoid face drift, body morphing, clothing change, or sudden new character.'},
  {t:'Scene Chain',x:'Scene [#]: continue directly from the final frame of Scene [#-1]. Preserve the exact pose direction, camera angle, lighting setup, color grade, background layout, and emotional rhythm.'},
@@ -131,18 +162,25 @@ const scenes=[
  {n:36,c:'cinematic',t:'終章 Hero Shot',d:'可用作片尾主鏡。',p:'Final hero shot: Asian super handsome man walking toward camera with calm confidence, premium cinematic lighting, stable identity, natural movement, no sudden cuts, strong closing frame ready for next scene.'}
 ];
 function el(id){return document.getElementById(id)}
-function toast(msg){const d=document.createElement('div');d.className='toast';d.textContent=msg;document.body.appendChild(d);setTimeout(()=>d.remove(),1800)}
-function copyText(t){navigator.clipboard.writeText(t).then(()=>toast('已複製'))}
-function add(t){selected.push(t);el('builder').value=selected.join('\n\n---\n\n');el('count').textContent=selected.length+' items';el('statSelected').textContent=selected.length;toast('已加入 Builder')}
+function escapeHTML(str){return String(str).replace(/[&<>'"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[m]))}
+function toast(msg){const d=document.createElement('div');d.className='toast fade-in';d.textContent=msg;document.body.appendChild(d);setTimeout(()=>d.remove(),1700)}
+function copyText(t){navigator.clipboard.writeText(t).then(()=>toast('已複製')).catch(()=>toast('複製失敗，請手動選取'))}
+function syncBuilder(){el('builder').value=selected.join('\n\n---\n\n');el('count').textContent=selected.length+' items';el('statSelected').textContent=selected.length}
+function scrollBuilderBottom(){const b=el('builder');b.focus();requestAnimationFrame(()=>{b.scrollTop=b.scrollHeight;b.selectionStart=b.selectionEnd=b.value.length})}
+function flashBuilder(){const b=el('builder');b.classList.remove('builder-flash');void b.offsetWidth;b.classList.add('builder-flash')}
+function markButton(btn){if(!btn)return;const card=btn.closest('.card');if(card){card.classList.add('added');setTimeout(()=>card.classList.remove('added'),1200)}btn.dataset.oldText=btn.dataset.oldText||btn.textContent;btn.textContent='Added ✓';setTimeout(()=>btn.textContent=btn.dataset.oldText,950)}
+function add(t,btn){selected.push(t);syncBuilder();scrollBuilderBottom();flashBuilder();markButton(btn);toast('已加入 Builder 底部')}
+function addChain(){add(CHAIN_TEMPLATE)}
+function addTemplateChain(e){add(CHAIN_TEMPLATE,e.currentTarget)}
+function undoLast(){if(!selected.length)return toast('沒有可撤回項目');selected.pop();syncBuilder();scrollBuilderBottom();toast('已撤回最後一項')}
 function renderFilters(){el('filters').innerHTML=categories.map(c=>`<button class="pill ${active===c?'active':''}" onclick="active='${c}';renderFilters();renderScenes()">${c}</button>`).join('')}
-function renderModules(){el('modules').innerHTML=modules.map(m=>`<div class="card !p-4"><div class="font-bold text-emerald-300 mb-2">${m.t}</div><div class="text-xs text-slate-400 leading-relaxed mb-3">${m.x.slice(0,118)}...</div><div class="grid grid-cols-2 gap-2"><button class="btn btn-green !py-2" onclick='add(${JSON.stringify(m.x)})'>Add</button><button class="btn btn-dark !py-2" onclick='copyText(${JSON.stringify(m.x)})'>Copy</button></div></div>`).join('')}
-function renderScenes(){const q=el('search').value.toLowerCase().trim();let list=scenes.filter(s=>(active==='all'||s.c.includes(active)) && (!q||(s.t+s.d+s.p+s.c).toLowerCase().includes(q)));el('sceneGrid').innerHTML=list.map(s=>`<article class="card"><div class="flex justify-between gap-3 mb-2"><h3 class="text-lg font-black">${s.n}. ${s.t}</h3><span class="text-xs text-emerald-300 bg-emerald-400/10 border border-emerald-400/20 rounded-full px-2 py-1 h-fit">${s.c}</span></div><p class="text-sm text-slate-400 mb-4">${s.d}</p><div class="prompt" id="scene-${s.n}">${s.p}</div><div class="grid grid-cols-2 gap-3 mt-4"><button class="btn btn-green" onclick='add(${JSON.stringify(s.p)})'>Add to Builder</button><button class="btn btn-blue" onclick='copyText(${JSON.stringify(s.p)})'>Copy</button></div></article>`).join('')||'<div class="text-slate-400">沒有符合搜尋的場景。</div>'}
+function renderModules(){el('modules').innerHTML=modules.map((m,i)=>`<div class="card !p-4 fade-in"><div class="font-bold text-emerald-300 mb-2">${escapeHTML(m.t)}</div><div class="text-xs text-slate-400 leading-relaxed mb-3">${escapeHTML(m.x.slice(0,118))}...</div><div class="grid grid-cols-2 gap-2"><button class="btn btn-green !py-2" onclick="add(modules[${i}].x,this)">Add</button><button class="btn btn-dark !py-2" onclick="copyText(modules[${i}].x)">Copy</button></div></div>`).join('')}
+function renderScenes(){const q=el('search').value.toLowerCase().trim();let list=scenes.filter(s=>(active==='all'||s.c.includes(active))&&(!q||(s.t+s.d+s.p+s.c).toLowerCase().includes(q)));el('sceneGrid').innerHTML=list.map(s=>`<article class="card fade-in"><div class="flex justify-between gap-3 mb-2"><h3 class="text-lg font-black">${s.n}. ${escapeHTML(s.t)}</h3><span class="text-xs text-emerald-300 bg-emerald-400/10 border border-emerald-400/20 rounded-full px-2 py-1 h-fit">${escapeHTML(s.c)}</span></div><p class="text-sm text-slate-400 mb-4">${escapeHTML(s.d)}</p><div class="prompt" id="scene-${s.n}">${escapeHTML(s.p)}</div><div class="grid grid-cols-2 gap-3 mt-4"><button class="btn btn-green" onclick="add(scenes.find(x=>x.n===${s.n}).p,this)">Add to Builder</button><button class="btn btn-blue" onclick="copyText(scenes.find(x=>x.n===${s.n}).p)">Copy</button></div></article>`).join('')||'<div class="text-slate-400">沒有符合搜尋的場景。</div>'}
 function copyBuilder(){const v=el('builder').value.trim();if(!v)return toast('Builder 是空的');copyText(v)}
-function resetBuilder(){selected=[];el('builder').value='';el('count').textContent='0 items';el('statSelected').textContent='0';toast('已重置')}
-function exportTxt(){const v=el('builder').value.trim();if(!v)return toast('Builder 是空的');const blob=new Blob([v],{type:'text/plain;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='grok-prompt-builder.txt';a.click();URL.revokeObjectURL(a.href)}
-function addChain(){add('Scene [#]: Continue directly from the final frame of Scene [#-1]. Keep the same character identity, outfit, lighting, camera lens, environment, and motion rhythm. No scene reset, no face drift, no body proportion change.')} 
-function copyVisible(){const q=el('search').value.toLowerCase().trim();let list=scenes.filter(s=>(active==='all'||s.c.includes(active)) && (!q||(s.t+s.d+s.p+s.c).toLowerCase().includes(q))).map(s=>`${s.n}. ${s.t}\n${s.p}`).join('\n\n---\n\n');copyText(list)}
-renderFilters();renderModules();renderScenes();
+function resetBuilder(){selected=[];syncBuilder();toast('已重置')}
+function exportTxt(){const v=el('builder').value.trim();if(!v)return toast('Builder 是空的');const blob=new Blob([v],{type:'text/plain;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='grok-prompt-builder.txt';a.click();URL.revokeObjectURL(a.href);toast('TXT 已匯出')}
+function copyVisible(){const q=el('search').value.toLowerCase().trim();let list=scenes.filter(s=>(active==='all'||s.c.includes(active))&&(!q||(s.t+s.d+s.p+s.c).toLowerCase().includes(q))).map(s=>`${s.n}. ${s.t}\n${s.p}`).join('\n\n---\n\n');if(!list)return toast('沒有可複製場景');copyText(list)}
+el('chainTemplateBox').textContent=CHAIN_TEMPLATE;el('statScenes').textContent=scenes.length;el('statModules').textContent=modules.length;renderFilters();renderModules();renderScenes();syncBuilder();
 </script>
 </body>
 </html>
